@@ -19,8 +19,7 @@ const Work = (props)=>{
             <td>{props.company}</td>
             <td>{props.service}</td>
             <td>{props.description}</td>
-            <td>{props.timeFrom}</td>
-            <td>{props.timeTo}</td>
+            <td>{diff(props.timeFrom, props.timeTo)}</td>
         </tr>
     )
 }
