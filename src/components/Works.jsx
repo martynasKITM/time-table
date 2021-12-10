@@ -3,17 +3,27 @@ import AddWork from "./AddWork";
 import {Card} from "react-bootstrap";
 import {Table} from "react-bootstrap";
 import {Button} from "react-bootstrap";
+import Work from "./Work";
 
-const Works  = ()=>{
+const Works  = (props)=>{
     const [addWork,setAddWork] = useState(false)
+    const[works, setWorks] = useState([])
 
     const closeFormHandler = ()=>{
         setAddWork(false)
     }
 
+    const onSaveWorkHandler = (data)=>{
+        setWorks((prevData)=>{
+            return [data, ...prevData]
+        })
+        props.status(true)
+        closeFormHandler()
+    }
+    console.log(works)
     return(
         <>
-            {(addWork) && <AddWork/>}
+            {(addWork) && <AddWork onSave={onSaveWorkHandler}/>}
         <Card>
             <Card.Header>
                 <Card.Header>{(addWork)?
@@ -34,6 +44,14 @@ const Works  = ()=>{
                     </tr>
                     </thead>
                     <tbody>
+                    {!!works.length && works.map((w, i)=><Work
+                        key={i} date={w.date}
+                        company={w.company}
+                        service={w.service}
+                        description={w.description}
+                        timeFrom = {w.timeFrom}
+                        timeTo={w.timeTo}
+                    />)}
                     </tbody>
                 </Table>
             </Card.Body>
