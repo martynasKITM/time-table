@@ -20,7 +20,20 @@ const Works  = (props)=>{
         props.status(true)
         closeFormHandler()
     }
-    console.log(works)
+
+    const filteredItems = (filterCriteria) => {
+        const filterKeys = Object.keys(filterCriteria);
+        return works.filter(eachObj => {
+            return filterKeys.every(eachKey => {
+                if (!filterCriteria[eachKey].length) {
+                    return true; // Jeigu nera reiksmiu filtre, filtras yra ignoruojamas
+
+                }
+                return filterCriteria[eachKey].includes(eachObj[eachKey]);
+            });
+        });
+    };
+
     return(
         <>
             {(addWork) && <AddWork onSave={onSaveWorkHandler}/>}
