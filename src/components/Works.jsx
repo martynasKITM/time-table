@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import AddWork from "./AddWork";
 import {Card} from "react-bootstrap";
 import {Button} from "react-bootstrap";
 import WorkTable from "./WorkTable";
 import Filter from "./Filter";
+import * as service from "../services/worksServices"
 
 
 const Works  = (props)=>{
@@ -16,18 +17,36 @@ const Works  = (props)=>{
     }
 
     const onSaveWorkHandler = (data)=>{
-        setWorks((prevData)=>{
-            return [data, ...prevData]
-        })
+        service.addWork(data)
         props.status(true)
         closeFormHandler()
     }
+
 
     const filterHandler = (criteria)=>{
         setFilterCriteria(criteria)
     }
 
+    useEffect(()=>{
+        service.getAllWorks((works)=>setWorks(works))
+    },[])
+
     console.log(filterCriteria)
+
+    const filteredItems = (filterCriteria) => {
+        const filterKeys = Object.keys(filterCriteria);
+        return works.filter(eachObj => {
+            return filterKeys.every(eachKey => {
+                if (!filterCriteria[eachKey].length) {
+                    return true; // Jeigu nera reiksmiu filtre, filtras yra ignoruojamas
+
+                }
+                return filterCriteria[eachKey].includes(eachObj[eachKey]);
+            });
+        });
+    };
+
+
     return(
         <>
             {(addWork) && <AddWork onSave={onSaveWorkHandler}/>}
@@ -41,7 +60,7 @@ const Works  = (props)=>{
             <Card.Header>
                 <Filter criteria={filterHandler}/>
             </Card.Header>
-            <WorkTable works={works}/>
+            <WorkTable works={filteredItems(filterCriteria)}/>
         </Card>
         </>
     )
