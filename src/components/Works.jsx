@@ -3,15 +3,19 @@ import AddWork from "./AddWork";
 import {Card} from "react-bootstrap";
 import {Button} from "react-bootstrap";
 import WorkTable from "./WorkTable";
+import {useAuthState} from "react-firebase-hooks/auth";
 import Filter from "./Filter";
 import * as service from "../services/worksServices"
+import {useNavigate} from "react-router-dom"
+import {auth} from "../services/AuthServices";
 
 
 const Works  = (props)=>{
     const [addWork,setAddWork] = useState(false)
     const[works, setWorks] = useState([])
     const [filterCriteria, setFilterCriteria] = useState({});
-
+    const[user,loading, error] = useAuthState(auth)
+    const navigate = useNavigate()
     const closeFormHandler = ()=>{
         setAddWork(false)
     }
@@ -28,6 +32,7 @@ const Works  = (props)=>{
     }
 
     useEffect(()=>{
+        if(!user) navigate('/')
         service.getAllWorks((works)=>setWorks(works))
     },[])
 
