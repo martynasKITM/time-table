@@ -1,6 +1,5 @@
-
+import {Link} from "react-router-dom"
 const Work = (props)=>{
-
     const diff = (start, end)=> {
         start = start.split(":");
         end = end.split(":");
@@ -12,6 +11,9 @@ const Work = (props)=>{
         const minutes = Math.floor(diff / 1000 / 60);
         return (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
     }
+    const getID = ()=>{
+        props.onDelete(props.id)
+    }
 
     return(
         <tr>
@@ -20,6 +22,8 @@ const Work = (props)=>{
             <td>{props.service}</td>
             <td>{props.description}</td>
             <td>{diff(props.timeFrom, props.timeTo)}</td>
+            <td><a href="#/" onClick={getID}>Šalinti</a></td>
+            <td><Link key={props.id} to={`work/update/${props.id}`}>Redaguoti</Link></td>
         </tr>
     )
 }

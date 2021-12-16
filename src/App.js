@@ -1,7 +1,10 @@
 import Header from "./components/Header";
 import Works from "./components/Works";
+import AddWork from "./components/AddWork";
 import {useEffect, useState} from "react";
 import {Alert} from "react-bootstrap";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Work from "./components/Work";
 
 const App  = ()=>{
     const [message, setMessage] = useState('')
@@ -19,10 +22,15 @@ const App  = ()=>{
 
   return(
       <div className="container">
+          <Router>
         <Header/>
           {!!message.length && <Alert variant="success">{message}</Alert> }
-              <Works status ={setMessageHandler}/>
+              <Routes>
+                  <Route path="/" element={<Works status ={setMessageHandler}/>}/>
+                  <Route path="/work/update/:id" element={<AddWork/>}/>
+              </Routes>
 
+          </Router>
       </div>
   )
 

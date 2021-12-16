@@ -21,14 +21,28 @@ export const addWork=(data)=>{
         .add(data)
 }
 
-export const deleteWork=()=>{
+export const deleteWork=(id)=>{
+firebase
+    .firestore()
+    .collection('works')
+    .doc(id)
+    .delete()
+}
+
+export const updateWork=(id, data)=>{
+firebase
+    .firestore()
+    .collection('works')
+    .doc(id)
+    .set(data)
 
 }
 
-export const updateWork=()=>{
-
-}
-
-export const getWorkById=()=>{
-
+export const getWorkById=(item, id)=>{
+ firebase
+     .firestore()
+     .collection('works')
+     .doc(id)
+     .get()
+     .then((docRef)=>{item(docRef.data())})
 }

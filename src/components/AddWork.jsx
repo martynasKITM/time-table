@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Card} from "react-bootstrap";
 import {Form} from "react-bootstrap";
 import {Button} from "react-bootstrap";
@@ -6,8 +6,12 @@ import {FloatingLabel} from "react-bootstrap";
 import { BsFillArchiveFill } from "react-icons/bs";
 import Companies from "./companies/Companies";
 import Services from "./services/Services";
+import {useParams} from "react-router-dom";
+import * as service from "../services/worksServices"
+import {getWorkById} from "../services/worksServices";
 
 const AddWork = (props)=>{
+    const {id} = useParams();
     const [items, setItems] = useState({
         date:'',
         company: '--Pasirinkite įmonę--',
@@ -16,6 +20,10 @@ const AddWork = (props)=>{
         timeFrom:'',
         timeTo:''
     })
+
+    useEffect(()=>{
+        id && service.getWorkById(item=>setItems(item), id)
+    },[id])
 
     const handleChange = (e)=>{
         setItems(
@@ -31,6 +39,11 @@ const AddWork = (props)=>{
         props.onSave(items)
 
     }
+
+    const updateHandler =()=>{
+
+    }
+    console.log(id);
     return(
        <>
            <Card>
@@ -77,9 +90,14 @@ const AddWork = (props)=>{
                            <Form.Label>Iki:</Form.Label>
                            <Form.Control type="time" name="timeTo" value={items.timeTo} onChange={handleChange} />
                        </Form.Group>
-                       <Button variant="primary" type="submit">
+                       {(id)?
+                           <Button variant="primary" type="button" onClick={updateHandler}>
+                               Atnaujinti
+                           </Button>:
+                           <Button variant="primary" type="submit">
                            Saugoti
-                       </Button>
+                           </Button>
+                       }
                    </Form>
                </Card.Body>
            </Card>
